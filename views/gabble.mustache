@@ -1,23 +1,23 @@
 <a href="/gabble">Gabble</a>
 <a href="/newgab">Create A New Gab</a>
 <a href="#">Logged in as {{#username}}{{username}}{{/username}}</a>
-<a href="/logout">Logout</a> <hr>
+<a href="/logout">Logout</a>
 
 {{#username}}
 <h1>{{username}}</h1>
 {{/username}}
-{{#messages}}
-     {{username}}:{{text}}
-      <p>{{createdAt}}</p>
 
+{{#messages}}
+<hr>
+    <h2>{{username}}</h2>  <br> {{text}}
       <p>
-        <a href="/delete/{{id}}">Delete</a>
-        <a href="/like/{{id}}">Like</a>
-        <a href="/view/{{_id}}">View</a>
+        <a href="/destroy/{{id}}">Delete</a>
+        <a href="/likey/{{id}}">Likes</a>
+          <a href="/message/{{id}}"></a> - <span>{{likey}}</span>
       </p>
-    
+    <p>{{createdAt}}</p>
     {{^messages}}
       <p>There are no messages.</p>
     {{/messages}}
-<br>
+
 {{/messages}}

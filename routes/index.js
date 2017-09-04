@@ -104,6 +104,19 @@ router.post("/newgab", isAuthenticated, function(req, res) {
 });
 
 
+// 
+// router.get("/like/:id", function(req, res) {
+//   models.message.create({
+//     userId: req.user.id,
+//     messageId: req.params.messagesId
+//   })
+//   .then(function() {
+//     req.message.likey +=1
+//     req.save().then(function() {
+//       res.redirect("gabble");
+//     })
+//   })
+// });
 
 
 
@@ -114,6 +127,22 @@ router.post("/newgab", isAuthenticated, function(req, res) {
 
 
 
+
+
+
+
+
+
+router.get('/destroy/:id', isAuthenticated, function(req, res, next) {
+  models.message.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+  .then(function(data) {
+    res.redirect('/gabble');
+  })
+});
 
 
 
