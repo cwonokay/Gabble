@@ -4,6 +4,9 @@ const router          = express.Router();
 const bcrypt          = require("bcrypt");
 const passport        = require('passport');
 
+let creator;
+let message_arr;
+
 const isAuthenticated = function (req, res, next) {
   console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
@@ -83,13 +86,49 @@ router.get("/gabble", isAuthenticated, function(req, res) {
   })
   .then(function(data) {
 
-    res.render("gabble", {username:req.user.username, messages:data});
-  })
-  .catch(function(err) {
-    console.log(err);
-
+    data.forEach(function (data) {
+      // console.log(message.Users.dataValues.username);
+  //     message_arr= {
+  //       creator:  message.Users.dataValues.username,
+  //       createdAt: req.body.createdAt,
+  //       id:        req.message.id,
+  //       text:      req.body.text,
+  //       likey:     req.body.likey,
+  //       whoLiked:  false,
+  //       whoViewed: false,
+  //       delete:    false
+  //    }
+  //   messages.push(message_arr);
+  //    });
+  //  }).then(function(message_arr) {
+  //    messages.forEach(function(data) {
+  //      if (message.userId === userId) {
+  //        message.delete = true;
+  //      }
+     })
+    res.render("gabble", {username:req.user.username, messages:data, message_arr});
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 router.post("/newgab", isAuthenticated, function(req, res) {
   models.message.create({
@@ -104,7 +143,7 @@ router.post("/newgab", isAuthenticated, function(req, res) {
 });
 
 
-// 
+//
 // router.get("/like/:id", function(req, res) {
 //   models.message.create({
 //     userId: req.user.id,
@@ -119,19 +158,11 @@ router.post("/newgab", isAuthenticated, function(req, res) {
 // });
 
 
+router.post("/:messageId/wholiked", the_likes, function (req,res) {
 
-
-
-
-
-
-
-
-
-
-
-
-
+ res.render("wholiked", {username: req.session.username,  likers: liker });
+  liker = [];
+} );
 
 router.get('/destroy/:id', isAuthenticated, function(req, res, next) {
   models.message.destroy({

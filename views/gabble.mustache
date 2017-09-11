@@ -9,13 +9,17 @@
 
 {{#messages}}
 <hr>
-    <h2>{{username}}</h2>  <br> {{text}}
+    <h2>{{creator}}</h2>  <br> {{text}}
       <p>
         <a href="/destroy/{{id}}">Delete</a>
         <a href="/likey/{{id}}">Likes</a>
           <a href="/message/{{id}}"></a> - <span>{{likey}}</span>
       </p>
     <p>{{createdAt}}</p>
+
+  <form action="/{{id}}/wholiked" method="post">
+    <p><button type="submit" name="button">Who Liked:</button>{{likes}}</p>
+  </form>
     {{^messages}}
       <p>There are no messages.</p>
     {{/messages}}
