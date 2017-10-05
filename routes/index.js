@@ -5,7 +5,7 @@ const bcrypt          = require("bcrypt");
 const passport        = require('passport');
 
 let creator;
-let message_arr;
+
 
 const isAuthenticated = function (req, res, next) {
   console.log(req.isAuthenticated());
@@ -72,6 +72,7 @@ router.post("/signup", function(req, res) {
   }
 });
 
+
 router.get("/newgab", isAuthenticated, function(req, res) {
   res.render("newgab", {username: req.user.username});
 })
@@ -83,58 +84,23 @@ router.get("/gabble", isAuthenticated, function(req, res) {
       {model: models.User, as: 'Users'},
       {model: models.like, as: 'likes'}
     ]
-  })
-  .then(function(data) {
-
-    data.forEach(function (data) {
-      // console.log(message.Users.dataValues.username);
-  //     message_arr= {
-  //       creator:  message.Users.dataValues.username,
-  //       createdAt: req.body.createdAt,
-  //       id:        req.message.id,
-  //       text:      req.body.text,
-  //       likey:     req.body.likey,
-  //       whoLiked:  false,
-  //       whoViewed: false,
-  //       delete:    false
-  //    }
-  //   messages.push(message_arr);
-  //    });
-  //  }).then(function(message_arr) {
-  //    messages.forEach(function(data) {
-  //      if (message.userId === userId) {
-  //        message.delete = true;
-  //      }
+   }).then(function(messages) {
+     messages.forEach(function(message) {
+       console.log(message.dataValues.Users.dataValues.username);
+       if (message.userId === req.user.id) {
+         message.delete = true;
+       }
+       message.username = message.dataValues.Users.dataValues.username;
      })
-    res.render("gabble", {username:req.user.username, messages:data, message_arr});
+    res.render("gabble", {message: messages});
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 router.post("/newgab", isAuthenticated, function(req, res) {
   models.message.create({
     userId: req.user.id,
     text: req.body.messages,
-    likey: 0
   })
   .then(function(data) {
     // console.log(req.body.messages)
@@ -142,27 +108,41 @@ router.post("/newgab", isAuthenticated, function(req, res) {
   })
 });
 
+router.get("/like/:id", function(req, res) {
+  models.message.findOne({
+    where:{id: req.params.id},
+    include:[
+      {model: models.like, as: "likes"},
+    ]
+  })
+  .then(function(message) {
+  models.like.create({
+    userId: req.user.id,
+    messageId: req.params.messagesId
+  })
+})
+});
 
-//
-// router.get("/like/:id", function(req, res) {
-//   models.message.create({
-//     userId: req.user.id,
-//     messageId: req.params.messagesId
-//   })
-//   .then(function() {
-//     req.message.likey +=1
-//     req.save().then(function() {
-//       res.redirect("gabble");
-//     })
-//   })
-// });
+router.post("/like/:id", function(req, res){
+    models.like.create({
+        userId: req.user.id,
+        messageId: req.params.id
+    })
+    .then(function(like){
+        res.redirect("/gabble");
+    })
+  });
+
+router.get("/wholiked/:messageId", function(req, res) {
+
+  models.message.findById(req.params.messageId)
+
+  .then(function(message){
+      res.render("wholiked", {message: message, user: req.user});
+})
+});
 
 
-router.post("/:messageId/wholiked", the_likes, function (req,res) {
-
- res.render("wholiked", {username: req.session.username,  likers: liker });
-  liker = [];
-} );
 
 router.get('/destroy/:id', isAuthenticated, function(req, res, next) {
   models.message.destroy({

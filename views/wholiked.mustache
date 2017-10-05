@@ -1,4 +1,15 @@
 
-{{#likers}}
-<li>{{.}}</li>
-{{/likers}}
+<h1> People Who Liked This Post</h1>
+
+
+{{#message}}
+
+  <h3>  {{username}}</h3>
+
+{{#user}}
+
+{{username}}
+
+{{/user}}
+<br>
+{{/message}}

@@ -1,27 +1,34 @@
 <a href="/gabble">Gabble</a>
 <a href="/newgab">Create A New Gab</a>
-<a href="#">Logged in as {{#username}}{{username}}{{/username}}</a>
+<a href="#">Logged in as {{user.dataValues.name}}</a>
 <a href="/logout">Logout</a>
 
-{{#username}}
-<h1>{{username}}</h1>
-{{/username}}
 
-{{#messages}}
-<hr>
-    <h2>{{creator}}</h2>  <br> {{text}}
-      <p>
-        <a href="/destroy/{{id}}">Delete</a>
-        <a href="/likey/{{id}}">Likes</a>
-          <a href="/message/{{id}}"></a> - <span>{{likey}}</span>
-      </p>
-    <p>{{createdAt}}</p>
+<h1>{{user.dataValues.name}}</h1>
 
-  <form action="/{{id}}/wholiked" method="post">
-    <p><button type="submit" name="button">Who Liked:</button>{{likes}}</p>
+
+{{#message}}
+  <hr>
+  <h2>{{username}}</h2>  <br> {{text}}
+    <p>
+
+      <!-- <a href="/likey/{{id}}">Likes</a> -->
+      <p>{{likes.length}}-Likes</p>
+      <!-- <a href="/message/{{id}}"></a> - <span>{{likey}}</span> -->
+    </p>
+  <p>{{createdAt}}</p>
+  <form action="/like/{{id}}" method="post">
+    <p><button type="submit" name="button">Like Post:</button></p>
   </form>
-    {{^messages}}
-      <p>There are no messages.</p>
-    {{/messages}}
+    <a href="/wholiked/{{id}}"<button type="submit" name="button">Who Liked:</button></a>
 
-{{/messages}}
+
+  {{#delete}}
+
+  <a href="/destroy/{{id}}">Delete</a>
+  {{/delete}}
+{{/message}}
+
+{{^message}}
+  <p>There are no messages.</p>
+{{/message}}
